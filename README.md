@@ -73,3 +73,11 @@ Default reporter output:
   1 test failed
 ```
 The stack trace won't help you but I didn't find it to be an issue.
+
+## How to install
+
+```
+npm install --save-dev https://github.com/geoffreyTools/ava-babel-wrapper.git
+```
+
+ava-babel-wrapper has a dependency on `ava` and `@babel/core` so make sure you have them installed.
