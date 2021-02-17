@@ -1,24 +1,32 @@
 import babel from '@babel/core';
 import ava from 'ava';
+import { map, pipe } from './utils';
 import parseFunction from './parseFunction';
 import executable from './executable';
 import errorMessage from './errorMessage';
 
-const test = (plugins, scope) => (title, test, reject = log) => {
+const testFunc = (plugins, scope) => f => (title, test, reject = log) => {
     const [params, body] = parseFunction(test);
     const tooMany = maxParamsCount(2)(params);
     if (tooMany) throw tooMany;
 
-    ava(title, t =>
+    f(title, t =>
         babel.transformAsync(body, { plugins })
         .then(success(t, executable(params, scope, t), reject))
         .catch(failure(t, reject))
     )
 };
 
-export default (plugins = [], scope = {}) =>
-    Object.assign(test(plugins, scope), ava)
-;
+const apply = context => pipe(
+    map(key => [key, context(ava[key])]),
+    Object.fromEntries
+);
+
+export default (plugins = [], scope = {}) => {
+    const context = testFunc(plugins, scope);
+    const fns = apply(context)(['only', 'failing', 'serial']);
+    return Object.assign(context(ava), ava, fns)
+};
 
 const log = (t, e) => { t.fail(e) };
 
