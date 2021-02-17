@@ -1,6 +1,6 @@
 {
     "name": "ava-babel-wrapper",
-    "main": "dist/ava-babel-wrapper.js",
+    "main": "dist/ava-babel-wrapper",
     "version": "0.0.1",
     "description": "Dead simple wrapper for testing the behaviour of babel plugins with AVA.",
     "private": false,
