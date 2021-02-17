@@ -75,21 +75,28 @@ var errorMessage = pipe(
     json => '{' + json + '\n}'
 );
 
-const test = (plugins, scope) => (title, test, reject = log) => {
+const testFunc = (plugins, scope) => f => (title, test, reject = log) => {
     const [params, body] = parseFunction(test);
     const tooMany = maxParamsCount(2)(params);
     if (tooMany) throw tooMany;
 
-    ava(title, t =>
+    f(title, t =>
         babel.transformAsync(body, { plugins })
         .then(success(t, executable(params, scope, t), reject))
         .catch(failure(t, reject))
     );
 };
 
-var index = (plugins = [], scope = {}) =>
-    Object.assign(test(plugins, scope), ava)
-;
+const apply = context => pipe(
+    map(key => [key, context(ava[key])]),
+    Object.fromEntries
+);
+
+var index = (plugins = [], scope = {}) => {
+    const context = testFunc(plugins, scope);
+    const fns = apply(context)(['only', 'failing', 'serial']);
+    return Object.assign(context(ava), ava, fns)
+};
 
 const log = (t, e) => { t.fail(e); };
 
