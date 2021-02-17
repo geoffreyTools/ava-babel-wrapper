@@ -1,7 +1,15 @@
 {
     "name": "ava-babel-wrapper",
+    "type": "module",
     "main": "dist/ava-babel-wrapper",
-    "version": "0.0.1",
+    "exports": {
+        "node": {
+            "import": "./dist/ava-babel-wrapper.mjs",
+            "require": "./dist/ava-babel-wrapper.js"
+        },
+        "default": "./dist/ava-babel-wrapper.mjs"
+    },
+    "version": "0.0.2",
     "description": "Dead simple wrapper for testing the behaviour of babel plugins with AVA.",
     "private": false,
     "keywords": [],
@@ -17,7 +25,7 @@
         ]
     },
     "devDependencies": {
-        "@babel/core": "^7.12.10",
+        "@babel/core": "^7.12.16",
         "ava": "^3.15.0",
         "rollup": "^2.35.1"
     }
