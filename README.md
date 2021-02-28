@@ -76,7 +76,7 @@ test('identifier `baz` should throw',
     }, (t, json) => {
         const { type, message } = JSON.parse(json);
         t.is(type, 'compile-time error');
-        t.is(message, 'unknown: baz is a forbidden identitifer');
+        t.is(message, 'baz is a forbidden identitifer');
     }
 );
 ```

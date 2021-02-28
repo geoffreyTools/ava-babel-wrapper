@@ -123,7 +123,7 @@ const success = (t, execute, reject) => result => {
 const failure = (t, reject) => e => {
     const message = errorMessage({
         type: 'compile-time error',
-        message: e.message || e
+        message: (e.message || e).replace('unknown: ', '')
     });
     reject(t, message);
 };
