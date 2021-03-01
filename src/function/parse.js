@@ -1,4 +1,5 @@
-import { id, pipe, loose, either, $, map, split } from './utils'
+import { id, pipe, loose, either, $ } from '../utils';
+const { map, split, lastIndexOf, indexOf, toString } = $('map', 'split', 'lastIndexOf', 'indexOf', 'toString');
 
 const subBounds = rightFn => left => right => str => {
     const numOr = either(x => typeof x !== 'number')(id)
@@ -7,9 +8,9 @@ const subBounds = rightFn => left => right => str => {
     return str.substring(start(left), end(right));
 };
 
-const subExtremes = subBounds($('lastIndexOf'));
-const subBetween = subBounds($('indexOf'));
-const subBefore = subBounds($('indexOf'))(0)
+const subExtremes = subBounds(lastIndexOf);
+const subBetween = subBounds(indexOf);
+const subBefore = subBounds(indexOf)(0)
 
 const getFunctionBody = subExtremes('{')('}');
 
@@ -22,6 +23,6 @@ const getFunctionParameters = pipe(
 );
 
 export default pipe(
-    $('toString')(),
+    toString(null),
     str => [getFunctionParameters(str), getFunctionBody(str)]
 );

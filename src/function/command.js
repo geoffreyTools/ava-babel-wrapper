@@ -1,9 +1,10 @@
-import { map } from './utils';
+import { $ } from '../utils';
+const map = $('map');
 
 const assoc = store => map((_, i) => store[i])
 
-export default (paramNames, scope, t) => code => {
-    const paramValues = assoc([t, code])(paramNames)
+export default (paramNames, scope) => utils => code => {
+    const paramValues = assoc([utils, code])(paramNames)
     const scopeNames = Object.keys(scope);
     const scopeValues = Object.values(scope);
     const params = [...paramNames, ...scopeNames];
