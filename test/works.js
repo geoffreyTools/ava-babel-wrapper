@@ -21,7 +21,7 @@ test('foo should be turned to bar', (t, code) => {
     t.log(code);
 });
 
-test('identifier `baz` should throw', 
+test('identifier `baz` should throw',
     t => {
         const baz = 'baz';
     }, (t, json) => {
@@ -37,22 +37,22 @@ test.skip('some test to be skipped', t => {
     t.not(foo, 42);
 });
 
-test.failing('should fail', (t, code) => {
+test.failing('should fail', t => {
     t.is(foo, 'foo');
 })
 
-test.serial('should come 1st', (t, code) => {
+test.serial('should come 1st', t => {
     t.is(foo, bar);
 });
 
-test.serial('should come 2nd', (t, code) => {
+test.serial('should come 2nd', t => {
     t.is(foo, bar);
 });
 
-test.serial('should come 3rd', (t, code) => {
+test.serial('should come 3rd', t => {
     t.is(foo, bar);
 });
 
-// test.only('should be the only test run', (t, code) => {
+// test.only('should be the only test run', t => {
 //    t.is(foo, bar);
 // });
