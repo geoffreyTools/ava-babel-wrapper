@@ -6,7 +6,7 @@ const plugin = () => ({
             if (path.isIdentifier({ name: 'foo' })) 
                 path.node.name = 'bar';
             else if (path.isIdentifier({ name: 'baz' }))
-                throw new Error('baz is a forbidden identitifer')
+                throw path.buildCodeFrameError('baz is a forbidden identitifer');
         },
     },
 });
@@ -25,9 +25,23 @@ test('identifier `baz` should throw',
     t => {
         const baz = 'baz';
     }, (t, json) => {
-        const { type, message } = JSON.parse(json);
+        const { type, message, codeFrame } = JSON.parse(json);
         t.is(type, 'compile-time error');
         t.is(message, 'baz is a forbidden identitifer');
+        t.log(codeFrame)
+    }
+);
+
+test('should throw at runtime',
+    t => {
+        if (true) {
+            throw new Error('some error')
+        }
+    }, (t, json) => {
+        const { type, message, babelOutput } = JSON.parse(json);
+        t.is(type, 'run-time error');
+        t.is(message, 'some error');
+        t.log(babelOutput)
     }
 );
 
