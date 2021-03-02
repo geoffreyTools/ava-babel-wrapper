@@ -3,7 +3,7 @@ import avaBabel from 'ava-babel-wrapper';
 const plugin = () => ({
     visitor: {
         Identifier(path) {
-            if (path.isIdentifier({ name: 'foo' })) 
+            if (path.isIdentifier({ name: 'foo' }))
                 path.node.name = 'bar';
             else if (path.isIdentifier({ name: 'baz' }))
                 throw path.buildCodeFrameError('baz is a forbidden identitifer');
@@ -21,7 +21,11 @@ test('foo should be turned to bar', (t, code) => {
     t.log(code);
 });
 
-test('identifier `baz` should throw',
+test('identifier `baz` should throw at compile-time', t => {
+    const baz = 'baz';
+});
+
+test('caught: identifier `baz` should throw at compile-time',
     t => {
         const baz = 'baz';
     }, (t, json) => {
@@ -32,7 +36,13 @@ test('identifier `baz` should throw',
     }
 );
 
-test('should throw at runtime',
+test('should throw at runtime', t => {
+    if (true) {
+        throw new Error('some error')
+    }
+});
+
+test('caught: should throw at runtime',
     t => {
         if (true) {
             throw new Error('some error')
