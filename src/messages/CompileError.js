@@ -6,7 +6,7 @@ const isCodeFrameError = lines =>
     lines.length && lines.slice(1).every(x => x.includes(' |'))
 ;
 
-const extractCodeFrame = pipe(slice(1), join('\n'));
+const extractCodeFrame = pipe(slice(1), join('\n'), x => '\n' + x);
 
 const cleanup = replace('unknown: ', '');
 
