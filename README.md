@@ -70,8 +70,8 @@ Only some functions have their callback transpiled:
 Compile-time errors can be caught and tested via a second callback.
 
 ```javascript
-test('identifier `baz` should throw', 
-    t => {
+test('identifier `baz` should throw at compile-time', 
+    () => {
         const baz = 3;
     }, (t, json) => {
         const { type, message } = JSON.parse(json);
@@ -84,28 +84,53 @@ test('identifier `baz` should throw',
 Unhandled run-time and compile-time errors will be reported by AVA as shown bellow.
 
 ```javascript
-test('should fail at run time', 
-    t => {
-        throw "blow up !";
-    }
-);
+test('should throw at run time', t => {
+    throw "blow up !";
+});
 ```
 ```
-Suite › should fail at run time
+  Suite › should fail at run time
 
-{
-"type": "run-time error",
-"message": "blow up !",
-"babelOutput": "
-        throw \"blow up !\";"
-}
+  {
+    "type": "run-time error",
+    "message": "some error",
+    "babelOutput": "
+       throw \"blow up !\";"
+  }
 
-› log (node_modules/ava-babel-wrapper/src/index.js:23:27)
-› node_modules/ava-babel-wrapper/src/index.js:50:5
+  › defaultHandler (file://src/wrapper/defaultErrorHandler.js:4:12)
+  › file://src/utils.js:6:39
+  › file://src/results/Success.js:5:9
 
-─
+  ─
 
-1 test failed
+  1 test failed
+```
+```javascript
+test('identifier `baz` should throw at compile-time', () => {
+    const baz = 3;
+});
+```
+```
+  Suite › identifier `baz` should throw at compile-time
+
+  {
+    "type": "compile-time error",
+    "message": "baz is a forbidden identitifer",
+    "codeFrame": "
+    1 |
+  > 2 |     const baz = 'baz';
+      |           ^^^
+    3 |"
+  }
+
+  › defaultHandler (file://src/wrapper/defaultErrorHandler.js:4:12)
+  › file://src/utils.js:6:39
+  › file://src/results/Failure.js:2:5
+
+  ─
+
+  1 test failed
 ```
 The stack trace won't help you but I didn't find it to be an issue.
 
