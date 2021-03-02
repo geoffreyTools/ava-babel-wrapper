@@ -21,12 +21,12 @@ test('foo should be turned to bar', (t, code) => {
     t.log(code);
 });
 
-test('identifier `baz` should throw at compile-time', t => {
+test('identifier `baz` should throw at compile-time', () => {
     const baz = 'baz';
 });
 
 test('caught: identifier `baz` should throw at compile-time',
-    t => {
+    () => {
         const baz = 'baz';
     }, (t, json) => {
         const { type, message, codeFrame } = JSON.parse(json);
@@ -36,14 +36,14 @@ test('caught: identifier `baz` should throw at compile-time',
     }
 );
 
-test('should throw at runtime', t => {
+test('should throw at runtime', () => {
     if (true) {
         throw new Error('some error')
     }
 });
 
 test('caught: should throw at runtime',
-    t => {
+    () => {
         if (true) {
             throw new Error('some error')
         }

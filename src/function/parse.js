@@ -1,5 +1,5 @@
 import { id, pipe, loose, either, $ } from '../utils';
-const { map, split, lastIndexOf, indexOf, toString } = $('map', 'split', 'lastIndexOf', 'indexOf', 'toString');
+const { map, filter, split, lastIndexOf, indexOf, toString } = $('map', 'filter', 'split', 'lastIndexOf', 'indexOf', 'toString');
 
 const subBounds = rightFn => left => right => str => {
     const numOr = either(x => typeof x !== 'number')(id)
@@ -19,7 +19,8 @@ const getFunctionParameters = pipe(
     loose(subBefore('=>')),
     loose(subBetween('(')(')')),
     split(','),
-    map(x => x.trim())
+    map(x => x.trim()),
+    filter(x => x !== '()')
 );
 
 export default pipe(
