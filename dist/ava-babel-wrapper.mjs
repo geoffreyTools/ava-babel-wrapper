@@ -104,7 +104,7 @@ const isCodeFrameError = lines =>
     lines.length && lines.slice(1).every(x => x.includes(' |'))
 ;
 
-const extractCodeFrame = pipe(slice(1), join('\n'));
+const extractCodeFrame = pipe(slice(1), join('\n'), x => '\n' + x);
 
 const cleanup = replace('unknown: ', '');
 
@@ -122,10 +122,17 @@ var CompileError = ({ error }) => stringify({
     ...babelError(error)
 });
 
+const format = pipe(
+    $('split')('\n'),
+    $('map')(x => '     ' + x),
+    $('join')('\n'),
+    x => '\n' + x
+);
+
 var RuntimeError = ({ result, error }) => stringify({
     type: 'run-time error',
     message: error.message || error,
-    babelOutput: result.code
+    babelOutput: format(result.code)
 });
 
 var ErrorMessage = descriptor =>
