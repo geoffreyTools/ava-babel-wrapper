@@ -1,17 +1,17 @@
 import ava from 'ava';
 import { pipe, $ } from './utils';
-import testAbstractFactory from './test.js';
+import wrapFactory from './wrapper/wrap.js';
 
 const map = $('map');
 
-const build = factory => pipe(
+const wrapWith = factory => pipe(
     map(key => [key, factory(ava[key])]),
     Object.fromEntries
 );
 
 export default (plugins = [], scope = {}) => {
-    const testFactory = testAbstractFactory(plugins, scope);
-    const modifiers = build(testFactory)(['only', 'failing', 'serial']);
-    const test = Object.assign(testFactory(ava), ava, modifiers)
+    const wrap = wrapFactory(plugins, scope);
+    const modifiers = wrapWith(wrap)(['only', 'failing', 'serial']);
+    const test = Object.assign(wrap(ava), ava, modifiers)
     return test;
 };

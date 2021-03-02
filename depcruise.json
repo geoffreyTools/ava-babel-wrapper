@@ -9,7 +9,7 @@
                     "replace": true,
                     "graph": {
                         "splines": "ortho",
-                        "rankdir": "TB",
+                        "rankdir": "LR",
                         "overlap": "true",
                         "style": "filled",
                         "fillcolor": "#ffffff",

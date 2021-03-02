@@ -19,6 +19,12 @@ const $ = (x, ...xs) =>
 
 const stringify = x => JSON.stringify(x, null, '  ');
 
+const unescapeLideFeed = str => str.replace(/\\n/g, '\n');
+
+var defaultHandler = t => e => {
+    e && t.fail(unescapeLideFeed(e));
+};
+
 var failure = (ErrorMessage, { reject }) => error =>
     reject(ErrorMessage({ type: 'compile-time', error }))
 ;
@@ -90,12 +96,6 @@ var parse$1 = (func, scope) => {
     return { command: command(params, scope), body, params };
 };
 
-const unescapeLideFeed = str => str.replace(/\\n/g, '\n');
-
-var defaultHandler = t => e => {
-    e && t.fail(unescapeLideFeed(e));
-};
-
 const { slice, join, replace } = $('slice', 'join', 'replace');
 
 
@@ -135,7 +135,7 @@ var ErrorMessage = descriptor =>
 
 const Result = ResultFactory(ErrorMessage);
 
-var testAbstractFactory = (plugins, scope) => runner => (title, test, reject = defaultHandler) => {
+var wrapFactory = (plugins, scope) => runner => (title, test, reject = defaultHandler) => {
     const { body, command } = parse$1(test, scope);
 
     runner(title, t =>
@@ -156,15 +156,15 @@ var testAbstractFactory = (plugins, scope) => runner => (title, test, reject = d
 
 const map$2 = $('map');
 
-const build = factory => pipe(
+const wrapWith = factory => pipe(
     map$2(key => [key, factory(ava[key])]),
     Object.fromEntries
 );
 
 var index = (plugins = [], scope = {}) => {
-    const testFactory = testAbstractFactory(plugins, scope);
-    const modifiers = build(testFactory)(['only', 'failing', 'serial']);
-    const test = Object.assign(testFactory(ava), ava, modifiers);
+    const wrap = wrapFactory(plugins, scope);
+    const modifiers = wrapWith(wrap)(['only', 'failing', 'serial']);
+    const test = Object.assign(wrap(ava), ava, modifiers);
     return test;
 };
 

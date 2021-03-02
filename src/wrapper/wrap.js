@@ -1,9 +1,9 @@
 import babel from '@babel/core';
-import ResultFactory from './Result.js';
-import parse from './function/getFunction.js';
 import defaultHandler from './defaultErrorHandler.js'
-import ErrorMessage from './messages/ErrorMessage.js';
-import { _ } from './utils.js';
+import ResultFactory from '../results/Result.js';
+import parse from '../function/getFunction.js';
+import ErrorMessage from '../messages/ErrorMessage.js';
+import { _ } from '../utils.js';
 
 const Result = ResultFactory(ErrorMessage);
 
